@@ -1,0 +1,81 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var _ = require('lodash');
+//var npm = require('npm');
+//var path = require('path');
+var debug = require('debug')('gatherbase');
+
+//var pkgConfig = require('../package.json');
+var appConfig = require('../config');
+
+
+
+// Adapt relative paths of discoverer and handler modules
+/*_.each(appConfig.discoverers, function(discoverer, name) {
+  if (discoverer.module && _.str.startsWith(discoverer.module, '.')) {
+    discoverer.module = path.join('..', discoverer.module);
+  }
+});
+
+_.each(appConfig.handlers, function(handler, name) {
+  if (handler.module && _.str.startsWith(handler.module, '.')) {
+    handler.module = path.join('..', handler.module);
+  }
+});*/
+
+
+
+// Create server instance
+var GatherBaseServer = require('../lib/Server');
+var server = GatherBaseServer(appConfig);
+
+server.start();
+
+
+
+/*
+// Start server directly, if dependency check is skipped
+if (process.env.SKIP_DEPS_CHECK === 'true' || process.env.SKIP_DEPS_CHECK === 'yes') {
+  debug('skipping check and installation of dependencies');
+
+  return server.start();
+}
+
+
+
+// Generate list of modules that have to be installed
+var modules = [];
+
+_.each(appConfig.discoverers, function(discoverer, name) {
+  if (discoverer.module && !_.str.startsWith(discoverer.module, '.')) {
+    modules.push(discoverer.module);
+  }
+});
+
+_.each(appConfig.handlers, function(handler, name) {
+  if (handler.module && !_.str.startsWith(handler.module, '.')) {
+    modules.push(handler.module);
+  }
+});
+
+modules = _.uniq(modules);
+
+
+
+// Install missing modules
+npm.load(pkgConfig, function(err) {
+  if (err) throw err;
+
+  npm.commands.install(modules, function(err, data) {
+    if (err) throw err;
+
+    server.start();
+  });
+
+  npm.on('log', function(message) {
+    debug(message);
+  });
+});
+*/
